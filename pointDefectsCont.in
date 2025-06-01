@@ -1,0 +1,167 @@
+#Point defect loading of grain boundary 
+
+################################################################################
+#-------------------------------- System Setup --------------------------------#
+################################################################################
+
+#--- Variables ---#
+
+units metal
+read_restart 	${dataDir}/restart.*
+timestep 0.002  #picoseconds 
+
+#-- Variables --#
+variable 	xl equal "xlo"
+variable 	xh equal "xhi"
+variable 	yl equal "ylo"
+variable 	yh equal "yhi"
+variable 	zl equal "zlo"
+variable 	zh equal "zhi"
+
+variable 	MyTemp equal 350             # target temperature
+variable 	num equal 10                   # number of nvt simulations
+variable 	runTime equal 100000           # number of increment to calibrate the velocity
+variable 	energyConv equal 1602191.7     # conversion factor
+variable 	Bconstant equal 20000000       # empirical parameter
+
+variable	rate equal 800
+variable 	increment equal ${runTime}/${rate}
+
+variable	fix_len1 equal 5
+variable 	fix_len2 equal 5
+variable 	bot_1 equal ${zl}+${fix_len1}
+variable 	top_1 equal ${zh}-${fix_len1}
+variable 	bot_2 equal ${bot_1}+${fix_len2}
+variable 	top_2 equal ${top_1}-${fix_len2}
+
+#-- Box Setup --#
+region bot_edge block ${xl} ${xh} INF INF INF ${bot_1} units box
+region top_edge block ${xl} ${xh} INF INF ${top_1} INF units box
+
+delete_atoms region bot_edge compress yes
+delete_atoms region top_edge compress yes
+
+region bot_fixed block ${xl} ${xh} ${yl} ${yh} ${bot_1} ${bot_2} units box
+region top_fixed block ${xl} ${xh} ${yl} ${yh} ${top_2} ${top_1} units box
+
+group  bot_fixed region bot_fixed
+group  top_fixed region top_fixed
+
+group  region_fixed union bot_fixed top_fixed
+group  region_mobile subtract all region_fixed
+
+#-- Potential --#
+pair_style eam/alloy
+pair_coeff * * ${workingDir}/NiCoCr.lammps.eam Ni Co Cr
+
+#--- Neighbor Cuttoff ---#
+neighbor   2.0 bin
+neigh_modify every 1 delay 0 check yes
+thermo_modify lost warn
+
+delete_atoms overlap 1.8 all all
+
+#--- Computes ---#
+compute csym all centro/atom fcc
+compute potEnergy all pe/atom
+compute eatoms all reduce sum c_potEnergy
+compute kinEnergy all ke/atom
+compute sigma all stress/atom NULL virial       #per atom stress tensor, 6 components below
+compute aveSigma1 all reduce sum c_sigma[1]     #xx
+compute aveSigma2 all reduce sum c_sigma[2]     #yy
+compute aveSigma3 all reduce sum c_sigma[3]     #zz
+compute aveSigma4 all reduce sum c_sigma[4]     #xy
+compute aveSigma5 all reduce sum c_sigma[5]     #xz
+compute aveSigma6 all reduce sum c_sigma[6]     #yz
+
+#-- Compute Initial Values --#
+
+variable No equal 2159092
+print "Initial number of atoms = ${No}"
+
+variable Ei equal -9483857
+print "Initial energy of atoms = ${Ei}"
+
+#--- Equilibrate the Temperature (npt on bulk)---#
+
+velocity region_mobile create ${MyTemp} 8273920 units box
+velocity region_mobile zero linear
+velocity region_mobile zero angular
+
+################################################################################
+#------------------------------- SIA Deposition -------------------------------#
+################################################################################
+#-- Prepare for Deposition --#
+fix f3 region_fixed setforce 0.0 0.0 0.0	
+
+region gb block EDGE EDGE EDGE EDGE -3 3 units box	#grain boundary at z=0
+
+variable time_tot equal "(dt*step)/1000"
+variable dpa equal "((atoms-v_No)*(v_time_tot))/(v_No)"
+variable xseng equal "(c_eatoms) - (v_Ei)"
+variable gbarea equal "lx * ly * 2"
+variable gbe equal "(v_xseng)/(v_gbarea)"
+variable gbe_eVnm2 equal "(v_gbe)*0.01"
+
+#-- Load the GB --#
+fix depo all deposit ${rate} 1 ${increment} 16723111 region gb near 1.5 attempt 100 id next
+
+fix f4 region_mobile npt temp ${MyTemp} ${MyTemp} $(100*dt) aniso 0.0 0.0 $(1000*dt)
+
+thermo 10000
+thermo_style    custom step temp atoms etotal press vol lx ly lz c_eatoms v_gbe_eVnm2 v_time_tot v_dpa
+thermo_modify   lost ignore flush yes
+
+dump d3         all custom 50000 ${workingDir}/depo-${rate}-cocrni.* id type element mass xs ys zs c_csym c_potEnergy c_kinEnergy c_sigma[1] c_sigma[2] c_sigma[3] c_sigma[4] c_sigma[5] c_sigma[6] # dump every 50 ps, 0.1 ang
+dump_modify d3 element Ni Co Cr
+dump_modify d3 sort id
+
+run 100000           # run time for gb loading, 200 ps (0.2 ns)
+unfix depo
+unfix f4
+undump d3
+
+#--- Compute Final Values ---#
+
+variable time_tot equal "(dt*step)/1000"
+variable dpa equal "((atoms-v_No)*(v_time_tot))/(v_No)"
+variable DPA equal ${dpa}
+variable E equal "c_eatoms"
+variable Ef equal ${E}
+variable N equal count(all)
+variable Nf equal ${N}
+
+variable xseng equal "(v_Ef) - (v_Ei)"
+variable gbarea equal "lx * ly * 2"
+variable gbe equal "(v_xseng)/(v_gbarea)"
+variable gbe_eVnm2 equal "(v_gbe)*0.01"
+
+#--- Print Final Values ---#
+
+print "Initial number of atoms = ${No}"
+print "Current number of atoms = ${Nf}"
+print "Initial energy of atoms = ${Ei}"
+print "Final energy of atoms = ${Ef}"
+print "Grain Boundary Energy = ${gbe_eVnm2} eV/nm^2"
+print "Total deposition time elapsed = ${time_tot} ns"
+print "Total dpa = ${DPA}"
+
+write_restart restart.*
+#--- Quick Quench & Minimization ---#
+fix f5 region_mobile npt temp 10 10 $(100*dt) aniso 0.0 0.0 $(1000*dt)
+run 10001
+unfix f5
+
+min_style cg
+minimize 1e-14 1e-14 50000 200000
+
+dump d4 all custom 2 ${workingDir}/quenched-${rate}-cocrni.* id type element mass xs ys zs c_csym c_potEnergy c_kinEnergy c_sigma[1] c_sigma[2] c_sigma[3] c_sigma[4] c_sigma[5] c_sigma[6]
+run 1
+dump_modify d4 element Ni Co Cr
+dump_modify d4 sort id
+
+unfix f3
+unfix f5
+undump d4
+
+#-----------------------------#
