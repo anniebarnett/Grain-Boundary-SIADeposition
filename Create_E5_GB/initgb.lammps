@@ -1,0 +1,89 @@
+log ${workingDir}/output_run.log
+
+# metal units - picoseconds time unit
+variable timestep          equal .001
+
+variable dump_every             equal 10000
+variable thermo_every   equal 5000
+
+variable temperature  equal  ${inputTemp}
+
+variable iter   equal 50000
+variable feval  equal 200000
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+
+variable massFe equal 55.845
+variable latparam equal 2.8665
+
+variable v1x string "${v1x1} ${v1x2} ${v1x3}"
+variable v1y string "${v1y1} ${v1y2} ${v1y3}"
+variable v1z string "${v1z1} ${v1z2} ${v1z3}"
+print "${v1x1} ${v1x2} ${v1x3}"
+print "${v1y1} ${v1y2} ${v1y3}"
+print "${v1z1} ${v1z2} ${v1z3}"
+
+lattice bcc ${latparam} orient x ${v1x1} ${v1x2} ${v1x3} orient y ${v1y1} ${v1y2} ${v1y3} orient z ${v1z1} ${v1z2} ${v1z3}
+
+region  whole  block -${inX} ${inX} -${inY} ${inY} -${inZ} ${inZ}   units box
+
+create_box 1 whole
+create_atoms 1 box
+
+# grain boundary
+variable initialG equal -${inZ}*2/4.
+
+region bottom block INF INF INF INF INF ${initialG} units box
+
+lattice bcc ${latparam} orient x ${v2x1} ${v2x2} ${v2x3} orient y ${v2y1} ${v2y2} ${v2y3} orient z ${v2z1} ${v2z2} ${v2z3}
+
+delete_atoms region bottom
+create_atoms 1 region bottom
+
+group all region whole
+
+mass 1 ${massFe}
+
+# define atom neighbors by interaction cutoff distance + 2A
+neighbor   2.0 bin
+
+# every 0 means check every turn to see if new neighborlist needed
+# delay 5 means don't check until 5 steps after last list built
+# check yes means don't build a new neighborlist without checking if necessary
+neigh_modify every 1 delay 5 check yes
+
+thermo_modify lost warn
+
+pair_style eam/alloy
+pair_coeff * * ${workingDir}/Fe_Fe.CS3_33.alloy Fe
+
+delete_atoms overlap 1.8 all all
+
+# compute centrosymmetry and potential energy for each atom
+compute csym all centro/atom bcc
+compute potEnergy all pe/atom
+
+# compute stress, but ignore kinetic energy contribution
+compute sigma all stress/atom NULL virial
+
+# set the timestep, default .001
+timestep ${timestep}
+
+dump init_dump all cfg 5000 ${workingDir}/init.*.cfg &
+  mass type xs ys zs c_csym c_potEnergy c_sigma[1] c_sigma[2] c_sigma[3] c_sigma[4] c_sigma[5] c_sigma[6]
+
+dump_modify init_dump element Fe
+dump_modify init_dump sort id
+
+thermo_style custom step etotal temp vol pxx pyy pzz
+thermo ${thermo_every}
+thermo_modify lost warn
+
+fix 1 all box/relax aniso 0.0 vmax 0.01
+minimize 1e-14 1e-14 ${iter} ${feval}
+unfix 1
+
+write_restart ${workingDir}/init.*.restart
