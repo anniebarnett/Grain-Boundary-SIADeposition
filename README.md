@@ -7,12 +7,12 @@ This workflow allows users to probe grain boundary structural transitions in LAM
 
 ## 📁 Repository Structure  
 Grain-Boundary-SIADeposition/
-├── Create_E5_GB/           # Scripts to create a bicrystal with E5 grain boundary
-├── example_dump_files/     # Sample LAMMPS dump files from the initial and final frame of each stoichiometry simulation
-├── potential_files/        # EAM potential files used in simulations
-├── startfiles/             # Initial configuration files for SIA deposition simulations
-├── LICENSE                 # CC-BY-4.0 License
-└── README.md               # Project documentation
+├── Create_E5_GB/ # Scripts to create a bicrystal with E5 grain boundary
+├── example_dump_files/ # Sample LAMMPS dump files from the initial and final frame of each stoichiometry simulation
+├── potential_files/ # EAM potential files used in simulations
+├── startfiles/ # Initial configuration files for SIA deposition simulations
+├── LICENSE # CC-BY-4.0 License
+└── README.md # Project documentation
 
 ## 🚀 Getting Started
 To utilize the scripts and data in this repository:
