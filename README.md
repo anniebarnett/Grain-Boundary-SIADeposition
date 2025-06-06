@@ -23,7 +23,8 @@ To utilize the scripts and data in this repository:
    `cd Grain-Boundary-SIADeposition`
   
 2. Set up your environment:  
-Ensure you have LAMMPS installed. The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution.   
+- Ensure you have LAMMPS installed.
+- The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution.   
 
 3. Run simulations:  
 - Use the scripts in the `Create_E5_GB/` directory to generate bicrystals with speicfic grain boundary structures.
@@ -37,10 +38,10 @@ Contains sample output files from the LAMMPS simulations in 3 different stoichio
 `potential_files/`:  
 Includes the EAM potential files required for running the simulations in the CoCrNi system. Information about the potential can be found at: Q.-J. Li, H. Sheng, and E. Ma, ‘Strengthening in multi-principal element alloys with local-chemical-order roughened dislocation pathways’, Nat Commun, vol. 10, no. 1, p. 3563, Aug. 2019, doi: 10.1038/s41467-019-11464-7.
 
-'startfiles/':  
+`startfiles/`:  
 Files to perform SIA deposition at the GB. 
 
-'Create_E5_GB/':  
+`Create_E5_GB/`:  
 Files to create the bicrystal configuration. The GB character can be altered in the initgb.slurm file. The current files create a bicrystal configuration by constructing two adjoining FCC Ni grains with distinct crystallographic orientations. The top grain is created with orientation vectors [100],[021 ̅ ],[012]. Then, the bottom grain replaces the bottom half of the domain orientation with orientation [100],[021],[01 ̅2], forming a Σ5(012) symmetric tilt grain boundary about the [100] tilt axis.
 
 ## 🙋‍♀️ Contact  
