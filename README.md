@@ -19,8 +19,8 @@ This workflow allows users to probe grain boundary structural transitions in LAM
 ## 🚀 Getting Started
 To utilize the scripts and data in this repository:
 1. Clone the repository:  
-   'git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git'
-   'cd Grain-Boundary-SIADeposition' 
+   `git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git`
+   `cd Grain-Boundary-SIADeposition`
   
 2. Set up your environment:  
 Ensure you have LAMMPS installed. The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution.   
