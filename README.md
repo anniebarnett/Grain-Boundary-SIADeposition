@@ -5,14 +5,7 @@ Molecular dynamics simulation of preferential interstitial absorption at grain b
 ## 📝 Description  
 This workflow allows users to probe grain boundary structural transitions in LAMMPS by depositing atoms at the grain boundary and monitoring the bicrystal evolution. The project aims at providing insights into materials evolution under high-defect producing conditions, such as radition. The repository contains simulation data and scripts to deposition self-interstitial atoms (SIAs) at grain boundaries in a variety of material systems and dose rates. The provided code is for a ternary FCC alloy, however files for a 100% Nickel and 95% Nickel/5% Chromium alloy are also provided. 
 
-## 📁 Repository Structure  
-Grain-Boundary-SIADeposition/
-├── Create_E5_GB/ # Scripts to create a bicrystal with E5 grain boundary
-├── example_dump_files/ # Sample LAMMPS dump files from the initial and final frame of each stoichiometry simulation
-├── potential_files/ # EAM potential files used in simulations
-├── startfiles/ # Initial configuration files for SIA deposition simulations
-├── LICENSE # CC-BY-4.0 License
-└── README.md # Project documentation
+## 📁 Repository Structure ``` Grain-Boundary-SIADeposition/ ├── Create_E5_GB/ # Scripts to create a bicrystal with E5 grain boundary ├── example_dump_files/ # Sample LAMMPS dump files from the initial and final frame of each stoichiometry simulation ├── potential_files/ # EAM potential files used in simulations ├── startfiles/ # Initial configuration files for SIA deposition simulations ├── LICENSE # CC-BY-4.0 License └── README.md # Project documentation ```
 
 ## 🚀 Getting Started
 To utilize the scripts and data in this repository:
