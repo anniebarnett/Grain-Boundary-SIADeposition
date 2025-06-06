@@ -26,8 +26,10 @@ To utilize the scripts and data in this repository:
 Ensure you have LAMMPS installed. The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution.   
 
 3. Run simulations:  
-Use the scripts in the `Create_E5_GB/` directory to generate bicrystals with speicfic grain boundary structures.  
+Use the scripts in the `Create_E5_GB/` directory to generate bicrystals with speicfic grain boundary structures.
+
 Use the scripts in the `startfiles/` directory to begin the deposition simulation. This will run a specified number of loops, or until your HPC time has run out. To specfiy the number of loops for the simulation, manipulate line 47 in `startfiles/depo.slurm`.  
+
 Submit both GB creation and SIA deposition slurm jobs using `./masterInitGB.sh 1` and `./masterPDs.sh 1`, respectively. This enables you to submit multiple variations of the script, which will appended the slurm file with the number (i.e., `initgb$1.slurm`).   
 
 ## 📊 Data and Examples
