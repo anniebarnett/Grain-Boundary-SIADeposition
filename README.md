@@ -16,17 +16,17 @@ Grain-Boundary-SIADeposition/
 
 ## 🚀 Getting Started
 To utilize the scripts and data in this repository:
-1. Clone the repository:
-   git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git
-   cd Grain-Boundary-SIADeposition
+1. Clone the repository:  
+   git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git  
+   cd Grain-Boundary-SIADeposition  
   
-2. Set up your environment:
-Ensure you have LAMMPS installed. The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution. 
+2. Set up your environment:  
+Ensure you have LAMMPS installed. The bicrystal created using this set-up generates a simulation cell of >2M atoms. The provided bash scripts are set up for running on HPC, which is suggested due to the system size and runtime required to see GB evolution.   
 
-3. Run simulations:
-Use the scripts in the Create_E5_GB/ directory to generate bicrystals with speicfic grain boundary structures.
-Use the scripts in the startfiles/ directory to begin the deposition simulation. This will run a specified number of loops, or until your HPC time has run out. To specfiy the number of loops for the simulation, manipulate line 47 in startfiles/depo.slurm.
-Submit both GB creation and SIA deposition slurm jobs using ./masterInitGB.sh 1 and ./masterPDs.sh 1, respectively. This enables you to submit multiple variations of the script, which will appended the slurm file with the number (i.e., initgb$1.slurm). 
+3. Run simulations:  
+Use the scripts in the Create_E5_GB/ directory to generate bicrystals with speicfic grain boundary structures.  
+Use the scripts in the startfiles/ directory to begin the deposition simulation. This will run a specified number of loops, or until your HPC time has run out. To specfiy the number of loops for the simulation, manipulate line 47 in startfiles/depo.slurm.  
+Submit both GB creation and SIA deposition slurm jobs using ./masterInitGB.sh 1 and ./masterPDs.sh 1, respectively. This enables you to submit multiple variations of the script, which will appended the slurm file with the number (i.e., initgb$1.slurm).   
 
 ## 📊 Data and Examples
 example_dump_files/: Contains sample output files from the LAMMPS simulations in 3 different stoichiometries. Each stoichiometry folder (Nickel/Ni95Cr5/CoCrNi) contains the first and last dump files from a 20 ns simulation. The intermediate files have not been uploaded due to size limitations. For the intermediate files, please contact the maintainer. 
