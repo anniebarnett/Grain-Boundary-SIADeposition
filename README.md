@@ -37,11 +37,12 @@ startfiles/: Files to perform SIA deposition at the GB.
 
 Create_E5_GB/: Files to create the bicrystal configuration. The GB character can be altered in the initgb.slurm file. The current files create a bicrystal configuration by constructing two adjoining FCC Ni grains with distinct crystallographic orientations. The top grain is created with orientation vectors [100],[021 ̅ ],[012]. Then, the bottom grain replaces the bottom half of the domain orientation with orientation [100],[021],[01 ̅2], forming a Σ5(012) symmetric tilt grain boundary about the [100] tilt axis.
 
-## 🙋‍♀️ Contact
-For questions or collaborations, please contact the repository maintainer. 
-Maintainer: Annie K. Barnett
-Email: abarne65@jhu.edu
-GitHub: @anniebarnett
+## 🙋‍♀️ Contact  
+For questions or collaborations, please contact the repository maintainer.  
+
+Maintainer: Annie K. Barnett  
+Email: abarne65@jhu.edu  
+GitHub: [@anniebarnett](https://github.com/anniebarnett)  
 
 ## 📄 License
 This project is licensed under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). You are free to share and adapt the material for any purpose, even commercially, with appropriate credit.
