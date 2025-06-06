@@ -8,8 +8,6 @@
 #SBATCH -o "output/pointDefects.%j.o" # file for job output
 #SBATCH -e "output/pointDefects.%j.e" # file for job error messages
 #SBATCH --mail-type=end
-#SBATCH --mail-user=abarne65@jhu.edu
-##SBATCH --account=mfalk1
 
 echo "working directory = "$SLURM_SUBMIT_DIR # directory you submitted from
 
