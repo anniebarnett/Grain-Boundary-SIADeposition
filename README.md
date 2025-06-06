@@ -3,7 +3,11 @@ Molecular dynamics simulation of preferential interstitial absorption at grain b
 DOI: 10.5281/zenodo.15549457  
 
 ## 📝 Description  
-This workflow allows users to probe grain boundary structural transitions in LAMMPS by depositing atoms at the grain boundary and monitoring the bicrystal evolution. The project aims at providing insights into materials evolution under high-defect producing conditions, such as radition. The repository contains simulation data and scripts to deposit self-interstitial atoms (SIAs) at grain boundaries in a variety of material systems and dose rates. The provided code is for a ternary FCC alloy, however files for a 100% Nickel and 95% Nickel/5% Chromium alloy are also provided. 
+This workflow allows users to probe grain boundary structural transitions in LAMMPS by depositing atoms at the grain boundary and  
+monitoring the bicrystal evolution. The project aims at providing insights into materials evolution under high-defect producing   
+conditions, such as radition. The repository contains simulation data and scripts to deposit self-interstitial atoms (SIAs) at grain  
+boundaries in a variety of material systems and dose rates. The provided code is for a ternary FCC alloy, however files for a 100%   
+Nickel and 95% Nickel/5% Chromium alloy are also provided.   
 
 ## 📁 Repository Structure
 
