@@ -19,7 +19,7 @@ This workflow allows users to probe grain boundary structural transitions in LAM
 ## 🚀 Getting Started
 To utilize the scripts and data in this repository:
 1. Clone the repository:  
-   `git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git`
+   `git clone https://github.com/anniebarnett/Grain-Boundary-SIADeposition.git`  
    `cd Grain-Boundary-SIADeposition`
   
 2. Set up your environment:  
