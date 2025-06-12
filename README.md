@@ -51,5 +51,8 @@ Maintainer: Annie K. Barnett
 Email: abarne65@jhu.edu  
 GitHub: [@anniebarnett](https://github.com/anniebarnett)  
 
+## Acknowledgements
+The authors gratefully acknowledge support from the United States Department of Energy, Office of Basic Energy Sciences through contract DE-SC0020314.
+
 ## 📄 License
 This project is licensed under the Creative Commons Attribution 4.0 International License (CC-BY-4.0). You are free to share and adapt the material for any purpose, even commercially, with appropriate credit.
